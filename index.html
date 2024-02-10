@@ -85,6 +85,10 @@
       var cycleHeader = document.createElement('h2');
       cycleHeader.innerText = 'Cycle ' + cycleNumber;
 
+      cycleContainer.appendChild(speakersListDiv);
+      cycleContainer.appendChild(cycleHeader);
+      
+      // Create table
       var table = document.createElement('table');
       var tableRow = table.insertRow();
       var headers = ['Speaker (Affirmation)', 'Questioners (Affirmation)', 'Speaker (Negation)', 'Questioners (Negation)'];
@@ -101,8 +105,6 @@
         cell.innerText = '';
       }
 
-      cycleContainer.appendChild(speakersListDiv);
-      cycleContainer.appendChild(cycleHeader);
       cycleContainer.appendChild(table);
       document.getElementById('cycles-container').appendChild(cycleContainer);
     }
@@ -111,6 +113,9 @@
     for (var i = 1; i <= totalCycles; i++) {
       createCycleContainer(i);
     }
+
+    // Initialize by showing the first cycle
+    updateCycleVisibility();
 
     // Function to update the table with speakers and questioners for a specific cycle
     function updateCycle(cycleNumber, speakerAffirmation, questionersAffirmation, speakerNegation, questionersNegation) {
@@ -167,10 +172,7 @@
           '</li>';
       });
       speakersHtml += '</ul>';
-      // Set the speakers list for all cycles
-      for (var i = 1; i <= totalCycles; i++) {
-        document.getElementById('speakers-list' + i).innerHTML = speakersHtml;
-      }
+      document.getElementById('speakers-list' + currentCycle).innerHTML = speakersHtml; // Modified line to target the current cycle
     });
 
     // Event listener for the buttons next to each code
