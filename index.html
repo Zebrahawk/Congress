@@ -75,6 +75,7 @@
       cycleContainer.setAttribute('id', 'cycle' + cycleNumber);
 
       var speakersListDiv = document.createElement('div');
+      speakersListDiv.classList.add('speakers-list'); // Add class to identify speakers list
       speakersListDiv.setAttribute('id', 'speakers-list' + cycleNumber);
 
       var cycleHeader = document.createElement('h2');
@@ -134,6 +135,44 @@
       updateCycle(cycleNumber, speakerAffirmation, questionersAffirmation, speakerNegation, questionersNegation);
     }
 
+    // Event listener for the buttons next to each code (using event delegation)
+    document.addEventListener('click', function(event) {
+      if (event.target.classList.contains('btn-affirmation') ||
+          event.target.classList.contains('btn-negation') ||
+          event.target.classList.contains('btn-affirmation-q') ||
+          event.target.classList.contains('btn-negation-q')) {
+        var code = event.target.getAttribute('data-code');
+        var table = document.getElementById('cycle' + currentCycle).getElementsByTagName('table')[0];
+        var lastRow = table.rows[table.rows.length - 1]; // Get the last row of the table
+
+        if (event.target.classList.contains('btn-affirmation')) {
+          lastRow.cells[0].innerText += (lastRow.cells[0].innerText === '') ? code : ', ' + code;
+        } else if (event.target.classList.contains('btn-negation')) {
+          lastRow.cells[2].innerText += (lastRow.cells[2].innerText === '') ? code : ', ' + code;
+        } else if (event.target.classList.contains('btn-affirmation-q')) {
+          lastRow.cells[1].innerText += (lastRow.cells[1].innerText === '') ? code : ', ' + code;
+        } else if (event.target.classList.contains('btn-negation-q')) {
+          lastRow.cells[3].innerText += (lastRow.cells[3].innerText === '') ? code : ', ' + code;
+        }
+      }
+    });
+
+    // Function to handle switching to the next cycle
+    document.getElementById('next-cycle').addEventListener('click', function() {
+      if (currentCycle < totalCycles) {
+        currentCycle++;
+        updateCycleVisibility();
+      }
+    });
+
+    // Function to handle switching to the previous cycle
+    document.getElementById('prev-cycle').addEventListener('click', function() {
+      if (currentCycle > 1) {
+        currentCycle--;
+        updateCycleVisibility();
+      }
+    });
+
     // Function to randomize codes
     document.getElementById('randomize-codes').addEventListener('click', function() {
       var codesInput = document.getElementById('code-input').value;
@@ -158,39 +197,11 @@
           '</li>';
       });
       speakersHtml += '</ul>';
-document.getElementById('cycles-container').innerHTML += speakersHtml;
-    });
 
-    // Event listener for the buttons next to each code
-    document.getElementById('speakers-list').addEventListener('click', function(event) {
-      var code = event.target.getAttribute('data-code');
-      var table = document.getElementById('cycle' + currentCycle).getElementsByTagName('table')[0];
-      var lastRow = table.rows[table.rows.length - 1]; // Get the last row of the table
-
-      if (event.target.classList.contains('btn-affirmation')) {
-        lastRow.cells[0].innerText += (lastRow.cells[0].innerText === '') ? code : ', ' + code;
-      } else if (event.target.classList.contains('btn-negation')) {
-        lastRow.cells[2].innerText += (lastRow.cells[2].innerText === '') ? code : ', ' + code;
-      } else if (event.target.classList.contains('btn-affirmation-q')) {
-        lastRow.cells[1].innerText += (lastRow.cells[1].innerText === '') ? code : ', ' + code;
-      } else if (event.target.classList.contains('btn-negation-q')) {
-        lastRow.cells[3].innerText += (lastRow.cells[3].innerText === '') ? code : ', ' + code;
-      }
-    });
-
-    // Function to handle switching to the next cycle
-    document.getElementById('next-cycle').addEventListener('click', function() {
-      if (currentCycle < totalCycles) {
-        currentCycle++;
-        updateCycleVisibility();
-      }
-    });
-
-    // Function to handle switching to the previous cycle
-    document.getElementById('prev-cycle').addEventListener('click', function() {
-      if (currentCycle > 1) {
-        currentCycle--;
-        updateCycleVisibility();
+      // Append to the appropriate speakers list
+      var speakersList = document.querySelector('.speakers-list.active');
+      if (speakersList) {
+        speakersList.innerHTML = speakersHtml;
       }
     });
   });
