@@ -1,7 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Randomizer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+    input[type="submit"] {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #randomized-codes {
+      margin-top: 20px;
+    }
+  </style>
+</head>
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+  <h1>Code Randomizer</h1>
+  <p>Enter a list of codes separated by commas:</p>
+  <form id="code-form">
+    <input type="text" id="code-input" placeholder="Enter codes...">
+    <input type="submit" value="Randomize">
+  </form>
+  <div id="randomized-codes"></div>
+
+  <script>
+    document.getElementById('code-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      var codesInput = document.getElementById('code-input').value;
+      var codesArray = codesInput.split(',').map(function(code) {
+        return code.trim();
+      });
+      var randomizedCodes = shuffleArray(codesArray);
+      var randomizedCodesHtml = '<h2>Randomized Codes:</h2><ul>';
+      randomizedCodes.forEach(function(code) {
+        randomizedCodesHtml += '<li>' + code + '</li>';
+      });
+      randomizedCodesHtml += '</ul>';
+      document.getElementById('randomized-codes').innerHTML = randomizedCodesHtml;
+    });
+
+    function shuffleArray(array) {
+      var currentIndex = array.length, temporaryValue, randomIndex;
+      while (0 !== currentIndex) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+      return array;
+    }
+  </script>
 </body>
 </html>
