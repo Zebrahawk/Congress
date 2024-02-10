@@ -41,24 +41,6 @@
     <button type="button" id="randomize-codes">Randomize Codes</button>
   </form>
 
-  <form id="speakers-form">
-    <label for="speaker-affirmation-input">Speaker of Affirmation:</label><br>
-    <input type="text" id="speaker-affirmation-input" name="speaker-affirmation-input">
-    <button type="button" id="submit-affirmation">Submit</button><br><br>
-
-    <label for="speaker-negation-input">Speaker of Negation:</label><br>
-    <input type="text" id="speaker-negation-input" name="speaker-negation-input">
-    <button type="button" id="submit-negation">Submit</button><br><br>
-
-    <label for="questioners-affirmation-input">Questioners of Affirmation (comma-separated):</label><br>
-    <input type="text" id="questioners-affirmation-input" name="questioners-affirmation-input">
-    <button type="button" id="submit-questioners-affirmation">Submit</button><br><br>
-
-    <label for="questioners-negation-input">Questioners of Negation (comma-separated):</label><br>
-    <input type="text" id="questioners-negation-input" name="questioners-negation-input">
-    <button type="button" id="submit-questioners-negation">Submit</button><br><br>
-  </form>
-
   <div class="cycle-container active" id="cycle1">
     <h2>Order of Speakers</h2>
     <div id="speakers-list"></div>
@@ -140,7 +122,12 @@
       // Display order of speakers
       var speakersHtml = '<h2>Order of Speakers</h2><ul>';
       codesArray.forEach(function(code, index) {
-        speakersHtml += '<li>' + code + '</li>';
+        speakersHtml += '<li>' + code + ' ' +
+          '<button type="button" class="btn-affirmation" data-code="' + code + '">Affirmation Speaker</button>' +
+          '<button type="button" class="btn-negation" data-code="' + code + '">Negation Speaker</button>' +
+          '<button type="button" class="btn-affirmation-q" data-code="' + code + '">Affirmation Questioner</button>' +
+          '<button type="button" class="btn-negation-q" data-code="' + code + '">Negation Questioner</button>' +
+          '</li>';
       });
       speakersHtml += '</ul>';
       document.getElementById('speakers-list').innerHTML = speakersHtml;
@@ -173,21 +160,23 @@
       updateCycle(cycleNumber, speakerAffirmation, questionersAffirmation, speakerNegation, questionersNegation);
     }
 
-    // Submit button click event listeners
-    document.getElementById('submit-affirmation').addEventListener('click', function() {
-      submitInputs(currentCycle);
-    });
-
-    document.getElementById('submit-negation').addEventListener('click', function() {
-      submitInputs(currentCycle);
-    });
-
-    document.getElementById('submit-questioners-affirmation').addEventListener('click', function() {
-      submitInputs(currentCycle);
-    });
-
-    document.getElementById('submit-questioners-negation').addEventListener('click', function() {
-      submitInputs(currentCycle);
+    // Event listener for the buttons next to each code
+    document.getElementById('speakers-list').addEventListener('click', function(event) {
+      if (event.target.classList.contains('btn-affirmation')) {
+        var code = event.target.getAttribute('data-code');
+        document.getElementById('speaker-affirmation-input').value = code;
+      } else if (event.target.classList.contains('btn-negation')) {
+        var code = event.target.getAttribute('data-code');
+        document.getElementById('speaker-negation-input').value = code;
+      } else if (event.target.classList.contains('btn-affirmation-q')) {
+        var code = event.target.getAttribute('data-code');
+        var currentValue = document.getElementById('questioners-affirmation-input').value;
+        document.getElementById('questioners-affirmation-input').value = currentValue ? currentValue + ', ' + code : code;
+      } else if (event.target.classList.contains('btn-negation-q')) {
+        var code = event.target.getAttribute('data-code');
+        var currentValue = document.getElementById('questioners-negation-input').value;
+        document.getElementById('questioners-negation-input').value = currentValue ? currentValue + ', ' + code : code;
+      }
     });
   </script>
 </body>
