@@ -41,29 +41,10 @@
   <button type="button" id="randomize-codes">Randomize Codes</button>
  </form>
 
- <div class="cycle-container active" id="cycle1">
-  <h2>Order of Speakers</h2>
-  <div id="speakers-list"></div>
-
-  <h2>Cycle 1</h2>
-  <table>
-   <tr>
-    <th>Speaker (Affirmation)</th>
-    <th>Questioners (Affirmation)</th>
-    <th>Speaker (Negation)</th>
-    <th>Questioners (Negation)</th>
-   </tr>
-   <tr>
-    <td id="speaker-affirmation"></td>
-    <td id="questioners-affirmation"></td>
-    <td id="speaker-negation"></td>
-    <td id="questioners-negation"></td>
-   </tr>
-  </table>
-  <button id="add-row">Add Row</button> <!-- New button to add a row -->
+ <!-- Container for all cycles -->
+ <div id="cycles-container">
+  <!-- Add more cycle containers for additional cycles -->
  </div>
-
- <!-- Add more cycle containers for additional cycles -->
 
  <button id="prev-cycle">Previous Cycle</button>
  <button id="next-cycle">Next Cycle</button>
@@ -83,6 +64,48 @@
     }
    }
   }
+
+  // Function to create a new cycle container with a table
+  function createCycleContainer(cycleNumber) {
+   var cycleContainer = document.createElement('div');
+   cycleContainer.classList.add('cycle-container');
+   cycleContainer.setAttribute('id', 'cycle' + cycleNumber);
+
+   var speakersListDiv = document.createElement('div');
+   speakersListDiv.setAttribute('id', 'speakers-list' + cycleNumber);
+
+   var cycleHeader = document.createElement('h2');
+   cycleHeader.innerText = 'Cycle ' + cycleNumber;
+
+   var table = document.createElement('table');
+   var tableRow = table.insertRow();
+   var headers = ['Speaker (Affirmation)', 'Questioners (Affirmation)', 'Speaker (Negation)', 'Questioners (Negation)'];
+   headers.forEach(function(headerText) {
+    var headerCell = document.createElement('th');
+    headerCell.innerText = headerText;
+    tableRow.appendChild(headerCell);
+   });
+
+   // Add a row with empty cells to the table
+   var tableRow = table.insertRow();
+   for (var i = 0; i < headers.length; i++) {
+    var cell = tableRow.insertCell();
+    cell.innerText = '';
+   }
+
+   cycleContainer.appendChild(speakersListDiv);
+   cycleContainer.appendChild(cycleHeader);
+   cycleContainer.appendChild(table);
+   document.getElementById('cycles-container').appendChild(cycleContainer);
+  }
+
+  // Create cycle containers for all cycles
+  for (var i = 1; i <= totalCycles; i++) {
+   createCycleContainer(i);
+  }
+
+  // Initialize by showing the first cycle
+  updateCycleVisibility();
 
   // Function to update the table with speakers and questioners for a specific cycle
   function updateCycle(cycleNumber, speakerAffirmation, questionersAffirmation, speakerNegation, questionersNegation) {
@@ -135,20 +158,6 @@
    document.getElementById('speakers-list').innerHTML = speakersHtml;
   });
 
-  document.getElementById('prev-cycle').addEventListener('click', function() {
-   if (currentCycle > 1) {
-    currentCycle--;
-    updateCycleVisibility();
-   }
-  });
-
-  document.getElementById('next-cycle').addEventListener('click', function() {
-   if (currentCycle < totalCycles) {
-    currentCycle++;
-    updateCycleVisibility();
-   }
-  });
-
   // Event listener for the buttons next to each code
   document.getElementById('speakers-list').addEventListener('click', function(event) {
    var code = event.target.getAttribute('data-code');
@@ -163,6 +172,22 @@
     lastRow.cells[1].innerText += (lastRow.cells[1].innerText === '') ? code : ', ' + code;
    } else if (event.target.classList.contains('btn-negation-q')) {
     lastRow.cells[3].innerText += (lastRow.cells[3].innerText === '') ? code : ', ' + code;
+   }
+  });
+
+  // Function to handle switching to the next cycle
+  document.getElementById('next-cycle').addEventListener('click', function() {
+   if (currentCycle < totalCycles) {
+    currentCycle++;
+    updateCycleVisibility();
+   }
+  });
+
+  // Function to handle switching to the previous cycle
+  document.getElementById('prev-cycle').addEventListener('click', function() {
+   if (currentCycle > 1) {
+    currentCycle--;
+    updateCycleVisibility();
    }
   });
 
