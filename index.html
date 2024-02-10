@@ -30,9 +30,6 @@
   .cycle-container.active {
    display: block;
   }
-  .speakers-list.active {
-   display: block;
-  }
  </style>
 </head>
 <body>
@@ -58,16 +55,14 @@
   document.addEventListener('DOMContentLoaded', function() {
     var currentCycle = 1;
     var totalCycles = 6; // Change this value if you want more or fewer cycles
+    var speakerOrder = {}; // Object to store randomized speaker order
 
     // Function to show/hide cycle containers based on current cycle
     function updateCycleVisibility() {
       for (var i = 1; i <= totalCycles; i++) {
         var cycleContainer = document.getElementById('cycle' + i);
-        var speakersListDiv = document.getElementById('speakers-list' + i);
-
         if (i === currentCycle) {
           cycleContainer.classList.add('active');
-          speakersListDiv.classList.add('active'); // Add the 'active' class to the speakers list div
         } else {
           cycleContainer.classList.remove('active');
         }
@@ -80,15 +75,9 @@
       cycleContainer.classList.add('cycle-container');
       cycleContainer.setAttribute('id', 'cycle' + cycleNumber);
 
-      var speakersListDiv = document.createElement('div');
-      speakersListDiv.classList.add('speakers-list'); // Add class to identify speakers list
-      speakersListDiv.classList.add('active'); // Initially set as active
-      speakersListDiv.setAttribute('id', 'speakers-list' + cycleNumber);
-
       var cycleHeader = document.createElement('h2');
       cycleHeader.innerText = 'Cycle ' + cycleNumber;
 
-      cycleContainer.appendChild(speakersListDiv);
       cycleContainer.appendChild(cycleHeader);
       
       // Create table
@@ -122,15 +111,18 @@
 
     // Function to update the table with speakers and questioners for a specific cycle
     function updateCycle(cycleNumber, speakerAffirmation, questionersAffirmation, speakerNegation, questionersNegation) {
-      document.getElementById('speaker-affirmation' + cycleNumber).innerText = speakerAffirmation;
-      document.getElementById('questioners-affirmation' + cycleNumber).innerText = questionersAffirmation.join(', ');
-      document.getElementById('speaker-negation' + cycleNumber).innerText = speakerNegation;
-      document.getElementById('questioners-negation' + cycleNumber).innerText = questionersNegation.join(', ');
+      var cycleContainer = document.getElementById('cycle' + cycleNumber);
+      var table = cycleContainer.querySelector('table');
+      var lastRow = table.rows[table.rows.length - 1]; // Get the last row of the table
+      lastRow.cells[0].innerText = speakerAffirmation;
+      lastRow.cells[1].innerText = questionersAffirmation.join(', ');
+      lastRow.cells[2].innerText = speakerNegation;
+      lastRow.cells[3].innerText = questionersNegation.join(', ');
     }
 
     // Function to add a new row to the table
     document.getElementById('add-row').addEventListener('click', function() {
-      var table = document.getElementById('cycle' + currentCycle).getElementsByTagName('table')[0];
+      var table = document.getElementById('cycle' + currentCycle).querySelector('table');
       var newRow = table.insertRow(-1); // Insert a row at the end of the table
       newRow.innerHTML = '<td></td><td></td><td></td><td></td>'; // Add empty cells to the new row
     });
@@ -164,6 +156,9 @@
         [codesArray[i], codesArray[j]] = [codesArray[j], codesArray[i]];
       }
 
+      // Store randomized order of speakers
+      speakerOrder[currentCycle] = codesArray;
+
       // Display order of speakers
       var speakersHtml = '<h2>Order of Speakers</h2><ul>';
       codesArray.forEach(function(code, index) {
@@ -181,7 +176,7 @@
     // Event listener for the buttons next to each code
     document.getElementById('cycles-container').addEventListener('click', function(event) {
       var code = event.target.getAttribute('data-code');
-      var table = document.getElementById('cycle' + currentCycle).getElementsByTagName('table')[0];
+      var table = document.getElementById('cycle' + currentCycle).querySelector('table');
       var lastRow = table.rows[table.rows.length - 1]; // Get the last row of the table
 
       if (event.target.classList.contains('btn-affirmation')) {
