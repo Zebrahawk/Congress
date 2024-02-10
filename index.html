@@ -9,77 +9,59 @@
       font-family: Arial, sans-serif;
       margin: 20px;
     }
-    input[type="text"] {
+    table {
       width: 100%;
-      padding: 10px;
-      font-size: 16px;
+      border-collapse: collapse;
     }
-    input[type="submit"] {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
     }
-    #speakers-list,
-    #topic,
-    #speech-log,
-    #question-log {
-      margin-top: 20px;
+    th {
+      background-color: #f2f2f2;
     }
-    #speakers-list ul,
-    #speech-log ul,
-    #question-log ul {
-      list-style-type: none;
-      padding: 0;
+    h2 {
+      margin-top: 30px;
     }
   </style>
 </head>
 <body>
   <h1>Congress Debate</h1>
-  <h2>Order of Speakers</h2>
-  <div id="speakers-list"></div>
 
-  <h2>Topic</h2>
-  <div id="topic"></div>
-
-  <h2>Speech Log</h2>
-  <div id="speech-log"></div>
-
-  <h2>Question Log</h2>
-  <div id="question-log"></div>
+  <h2>Cycle 1</h2>
+  <table>
+    <tr>
+      <th>Speaker (Affirmation)</th>
+      <th>Questioners (Affirmation)</th>
+      <th>Speaker (Negation)</th>
+      <th>Questioners (Negation)</th>
+    </tr>
+    <tr>
+      <td id="speaker-affirmation"></td>
+      <td id="questioners-affirmation"></td>
+      <td id="speaker-negation"></td>
+      <td id="questioners-negation"></td>
+    </tr>
+  </table>
 
   <script>
-    document.getElementById('code-form').addEventListener('submit', function(event) {
-      event.preventDefault();
-      var codesInput = document.getElementById('code-input').value;
-      var codesArray = codesInput.split(',').map(function(code) {
-        return code.trim();
-      });
-
-      // Display order of speakers
-      var speakersHtml = '<ul>';
-      codesArray.forEach(function(code, index) {
-        speakersHtml += '<li>' + code + '</li>';
-      });
-      speakersHtml += '</ul>';
-      document.getElementById('speakers-list').innerHTML = speakersHtml;
-
-      // Randomly select a topic (you can replace this with your topic selection logic)
-      var topics = ['Topic 1', 'Topic 2', 'Topic 3'];
-      var randomTopic = topics[Math.floor(Math.random() * topics.length)];
-      document.getElementById('topic').innerHTML = '<p>Topic: ' + randomTopic + '</p>';
-    });
-
-    // Function to log a speech
-    function logSpeech(speaker, topic, position) {
-      var speechLogHtml = '<li>' + speaker + ' spoke on ' + topic + ' as ' + position + '</li>';
-      document.getElementById('speech-log').innerHTML += speechLogHtml;
+    // Function to update the table with speakers and questioners
+    function updateCycle(speakerAffirmation, questionersAffirmation, speakerNegation, questionersNegation) {
+      document.getElementById('speaker-affirmation').innerText = speakerAffirmation;
+      document.getElementById('questioners-affirmation').innerText = questionersAffirmation.join(', ');
+      document.getElementById('speaker-negation').innerText = speakerNegation;
+      document.getElementById('questioners-negation').innerText = questionersNegation.join(', ');
     }
 
-    // Function to log a question
-    function logQuestion(questioner, speaker, topic) {
-      var questionLogHtml = '<li>' + questioner + ' asked ' + speaker + ' a question on ' + topic + '</li>';
-      document.getElementById('question-log').innerHTML += questionLogHtml;
-    }
+    // Sample usage to update the cycle table
+    var cycle1 = {
+      speakerAffirmation: 'Code 1',
+      questionersAffirmation: ['Code 2', 'Code 3', 'Code 4', 'Code 5'],
+      speakerNegation: 'Code 6',
+      questionersNegation: ['Code 7', 'Code 8', 'Code 9', 'Code 10']
+    };
+    updateCycle(cycle1.speakerAffirmation, cycle1.questionersAffirmation, cycle1.speakerNegation, cycle1.questionersNegation);
   </script>
 </body>
 </html>
