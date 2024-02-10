@@ -24,6 +24,12 @@
     h2 {
       margin-top: 30px;
     }
+    .cycle-container {
+      display: none;
+    }
+    .cycle-container.active {
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -52,69 +58,118 @@
     <input type="submit" value="Submit All">
   </form>
 
-  <h2>Order of Speakers</h2>
-  <div id="speakers-list"></div>
+  <div class="cycle-container active" id="cycle1">
+    <h2>Order of Speakers</h2>
+    <div id="speakers-list"></div>
 
-  <h2>Cycle 1</h2>
-  <table>
-    <tr>
-      <th>Speaker (Affirmation)</th>
-      <th>Questioners (Affirmation)</th>
-      <th>Speaker (Negation)</th>
-      <th>Questioners (Negation)</th>
-    </tr>
-    <tr>
-      <td id="speaker-affirmation"></td>
-      <td id="questioners-affirmation"></td>
-      <td id="speaker-negation"></td>
-      <td id="questioners-negation"></td>
-    </tr>
-  </table>
+    <h2>Cycle 1</h2>
+    <table>
+      <tr>
+        <th>Speaker (Affirmation)</th>
+        <th>Questioners (Affirmation)</th>
+        <th>Speaker (Negation)</th>
+        <th>Questioners (Negation)</th>
+      </tr>
+      <tr>
+        <td id="speaker-affirmation"></td>
+        <td id="questioners-affirmation"></td>
+        <td id="speaker-negation"></td>
+        <td id="questioners-negation"></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="cycle-container" id="cycle2">
+    <h2>Order of Speakers</h2>
+    <div id="speakers-list2"></div>
+
+    <h2>Cycle 2</h2>
+    <table>
+      <tr>
+        <th>Speaker (Affirmation)</th>
+        <th>Questioners (Affirmation)</th>
+        <th>Speaker (Negation)</th>
+        <th>Questioners (Negation)</th>
+      </tr>
+      <tr>
+        <td id="speaker-affirmation2"></td>
+        <td id="questioners-affirmation2"></td>
+        <td id="speaker-negation2"></td>
+        <td id="questioners-negation2"></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Add more cycle containers for additional cycles -->
+
+  <button id="prev-cycle">Previous Cycle</button>
+  <button id="next-cycle">Next Cycle</button>
 
   <script>
-    // Function to shuffle array
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+    var currentCycle = 1;
+    var totalCycles = 6; // Change this value if you want more or fewer cycles
+
+    // Function to show/hide cycle containers based on current cycle
+    function updateCycleVisibility() {
+      for (var i = 1; i <= totalCycles; i++) {
+        var cycleContainer = document.getElementById('cycle' + i);
+        if (i === currentCycle) {
+          cycleContainer.classList.add('active');
+        } else {
+          cycleContainer.classList.remove('active');
+        }
       }
-      return array;
     }
 
-    // Function to update the table with speakers and questioners
-    function updateCycle(speakerAffirmation, questionersAffirmation, speakerNegation, questionersNegation) {
-      document.getElementById('speaker-affirmation').innerText = speakerAffirmation;
-      document.getElementById('questioners-affirmation').innerText = questionersAffirmation.join(', ');
-      document.getElementById('speaker-negation').innerText = speakerNegation;
-      document.getElementById('questioners-negation').innerText = questionersNegation.join(', ');
+    // Function to update the table with speakers and questioners for a specific cycle
+    function updateCycle(cycleNumber, speakerAffirmation, questionersAffirmation, speakerNegation, questionersNegation) {
+      document.getElementById('speaker-affirmation' + cycleNumber).innerText = speakerAffirmation;
+      document.getElementById('questioners-affirmation' + cycleNumber).innerText = questionersAffirmation.join(', ');
+      document.getElementById('speaker-negation' + cycleNumber).innerText = speakerNegation;
+      document.getElementById('questioners-negation' + cycleNumber).innerText = questionersNegation.join(', ');
     }
 
     // Sample usage to update the cycle table with randomized speakers and questioners
-    document.getElementById('submit-affirmation').addEventListener('click', function(event) {
+    document.getElementById('code-form').addEventListener('submit', function(event) {
       event.preventDefault();
+      var codesInput = document.getElementById('code-input').value;
+      var codesArray = codesInput.split(',').map(function(code) {
+        return code.trim();
+      });
+
+      // Display order of speakers
+      var speakersHtml = '<h2>Order of Speakers</h2><ul>';
+      codesArray.forEach(function(code, index) {
+        speakersHtml += '<li>' + code + '</li>';
+      });
+      speakersHtml += '</ul>';
+      document.getElementById('speakers-list').innerHTML = speakersHtml;
+
+      // Update the cycle table with input speakers and questioners for the current cycle
       var speakerAffirmation = document.getElementById('speaker-affirmation-input').value.trim();
-      document.getElementById('speaker-affirmation-input').value = '';
-      document.getElementById('speaker-affirmation-input').focus();
-      document.getElementById('speaker-affirmation').innerText = speakerAffirmation;
-    });
-
-    document.getElementById('submit-negation').addEventListener('click', function(event) {
-      event.preventDefault();
       var speakerNegation = document.getElementById('speaker-negation-input').value.trim();
-      document.getElementById('speaker-negation-input').value = '';
-      document.getElementById('speaker-negation-input').focus();
-      document.getElementById('speaker-negation').innerText = speakerNegation;
-    });
-
-    document.getElementById('submit-questioners-affirmation').addEventListener('click', function(event) {
-      event.preventDefault();
       var questionersAffirmation = document.getElementById('questioners-affirmation-input').value.split(',').map(function(code) {
         return code.trim();
       });
-      document.getElementById('questioners-affirmation-input').value = '';
-      document.getElementById('questioners-affirmation-input').focus();
-      document.getElementById('questioners-affirmation').innerText = questionersAffirmation.join(', ');
+      var questionersNegation = document.getElementById('questioners-negation-input').value.split(',').map(function(code) {
+        return code.trim();
+      });
+      updateCycle(currentCycle, speakerAffirmation, questionersAffirmation, speakerNegation, questionersNegation);
     });
 
-    document.getElementById('submit-questioners-negation').addEventListener('click', function(event) {
-      event.preventDefault();
+    document.getElementById('prev-cycle').addEventListener('click', function() {
+      if (currentCycle > 1) {
+        currentCycle--;
+        updateCycleVisibility();
+      }
+    });
+
+    document.getElementById('next-cycle').addEventListener('click', function() {
+      if (currentCycle < totalCycles) {
+        currentCycle++;
+        updateCycleVisibility();
+      }
+    });
+  </script>
+</body>
+</html>
