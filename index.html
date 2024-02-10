@@ -147,54 +147,49 @@ function updateCycleVisibility() {
       }
     });
 
-    // Function to randomize codes
-    document.getElementById('randomize-codes').addEventListener('click', function() {
-      var codesInput = document.getElementById('code-input').value;
-      var codesArray = codesInput.split(',').map(function(code) {
-        return code.trim();
-      });
+// Function to randomize codes
+document.getElementById('randomize-codes').addEventListener('click', function() {
+  var codesInput = document.getElementById('code-input').value;
+  var codesArray = codesInput.split(',').map(function(code) {
+    return code.trim();
+  });
 
-      // Randomize the codes
-      for (var i = codesArray.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        [codesArray[i], codesArray[j]] = [codesArray[j], codesArray[i]];
-      }
+  // Randomize the codes
+  for (var i = codesArray.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    [codesArray[i], codesArray[j]] = [codesArray[j], codesArray[i]];
+  }
 
-      // Display order of speakers
-      var speakersHtml = '<h2>Order of Speakers</h2><ul>';
-      codesArray.forEach(function(code, index) {
-        speakersHtml += '<li>' + code + '</li>'; // Display the randomized speaker order
-      });
-      speakersHtml += '</ul>';
+  // Display order of speakers
+  var speakersHtml = '<h2>Order of Speakers</h2><ul>';
+  codesArray.forEach(function(code, index) {
+    speakersHtml += '<li>' + code + ' ' +
+      '<button type="button" class="btn-affirmation" data-code="' + code + '">Affirmation Speaker</button>' +
+      '<button type="button" class="btn-negation" data-code="' + code + '">Negation Speaker</button>' +
+      '<button type="button" class="btn-affirmation-q" data-code="' + code + '">Affirmation Questioner</button>' +
+      '<button type="button" class="btn-negation-q" data-code="' + code + '">Negation Questioner</button>' +
+      '</li>';
+  });
+  speakersHtml += '</ul>';
+  document.getElementById('speakers-list' + currentCycle).innerHTML = speakersHtml; // Modified line to target the current cycle
+});
 
-      // Append to the appropriate speakers list
-      var speakersList = document.querySelector('.speakers-list.active');
-      if (speakersList) {
-        speakersList.innerHTML = speakersHtml;
-      }
-    });
+// Event listener for the buttons next to each code
+document.getElementById('cycles-container').addEventListener('click', function(event) {
+  var code = event.target.getAttribute('data-code');
+  var table = document.getElementById('cycle' + currentCycle).getElementsByTagName('table')[0];
+  var lastRow = table.rows[table.rows.length - 1]; // Get the last row of the table
 
-    // Event listener for the buttons next to each code (using event delegation)
-    document.addEventListener('click', function(event) {
-      if (event.target.classList.contains('btn-affirmation') ||
-          event.target.classList.contains('btn-negation') ||
-          event.target.classList.contains('btn-affirmation-q') ||
-          event.target.classList.contains('btn-negation-q')) {
-        var code = event.target.getAttribute('data-code');
-        var table = document.getElementById('cycle' + currentCycle).getElementsByTagName('table')[0];
-        var lastRow = table.rows[table.rows.length - 1]; // Get the last row of the table
-
-        if (event.target.classList.contains('btn-affirmation')) {
-          lastRow.cells[0].innerText += (lastRow.cells[0].innerText === '') ? code : ', ' + code;
-        } else if (event.target.classList.contains('btn-negation')) {
-          lastRow.cells[2].innerText += (lastRow.cells[2].innerText === '') ? code : ', ' + code;
-        } else if (event.target.classList.contains('btn-affirmation-q')) {
-          lastRow.cells[1].innerText += (lastRow.cells[1].innerText === '') ? code : ', ' + code;
-        } else if (event.target.classList.contains('btn-negation-q')) {
-          lastRow.cells[3].innerText += (lastRow.cells[3].innerText === '') ? code : ', ' + code;
-        }
-      }
-    });
+  if (event.target.classList.contains('btn-affirmation')) {
+    lastRow.cells[0].innerText += (lastRow.cells[0].innerText === '') ? code : ', ' + code;
+  } else if (event.target.classList.contains('btn-negation')) {
+    lastRow.cells[2].innerText += (lastRow.cells[2].innerText === '') ? code : ', ' + code;
+  } else if (event.target.classList.contains('btn-affirmation-q')) {
+    lastRow.cells[1].innerText += (lastRow.cells[1].innerText === '') ? code : ', ' + code;
+  } else if (event.target.classList.contains('btn-negation-q')) {
+    lastRow.cells[3].innerText += (lastRow.cells[3].innerText === '') ? code : ', ' + code;
+  }
+});
   });
  </script>
 </body>
