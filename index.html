@@ -148,17 +148,17 @@
     });
 
     // Function to handle submission of speaker and questioner inputs
-    function submitInputs(cycleNumber) {
-      var speakerAffirmation = document.getElementById('speaker-affirmation-input').value.trim();
-      var speakerNegation = document.getElementById('speaker-negation-input').value.trim();
-      var questionersAffirmation = document.getElementById('questioners-affirmation-input').value.split(',').map(function(code) {
-        return code.trim();
-      });
-      var questionersNegation = document.getElementById('questioners-negation-input').value.split(',').map(function(code) {
-        return code.trim();
-      });
-      updateCycle(cycleNumber, speakerAffirmation, questionersAffirmation, speakerNegation, questionersNegation);
-    }
+function submitInputs(cycleNumber) {
+  var speakerAffirmation = document.getElementById('speaker-affirmation' + cycleNumber).innerText.trim();
+  var speakerNegation = document.getElementById('speaker-negation' + cycleNumber).innerText.trim();
+  var questionersAffirmation = document.getElementById('questioners-affirmation' + cycleNumber).innerText.split(',').map(function(code) {
+    return code.trim();
+  });
+  var questionersNegation = document.getElementById('questioners-negation' + cycleNumber).innerText.split(',').map(function(code) {
+    return code.trim();
+  });
+  updateCycle(cycleNumber, speakerAffirmation, questionersAffirmation, speakerNegation, questionersNegation);
+}
 
     // Event listener for the buttons next to each code
 document.getElementById('speakers-list').addEventListener('click', function(event) {
@@ -176,7 +176,6 @@ document.getElementById('speakers-list').addEventListener('click', function(even
     addQuestioner(currentCycle, 'negation', code);
   }
 });
-
 function addSpeaker(cycleNumber, type, code) {
   var table = document.getElementById('cycle' + cycleNumber).getElementsByTagName('table')[0];
   var row = table.insertRow(-1);
@@ -191,7 +190,6 @@ function addQuestioner(cycleNumber, type, code) {
   var cell = row.insertCell(cellIndex);
   cell.innerHTML = code;
 }
-
   </script>
 </body>
 </html>
