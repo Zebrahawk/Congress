@@ -34,18 +34,22 @@
     <input type="text" id="code-input" name="code-input"><br><br>
 
     <label for="speaker-affirmation-input">Speaker of Affirmation:</label><br>
-    <input type="text" id="speaker-affirmation-input" name="speaker-affirmation-input"><br><br>
+    <input type="text" id="speaker-affirmation-input" name="speaker-affirmation-input">
+    <button type="button" id="submit-affirmation">Submit</button><br><br>
 
     <label for="speaker-negation-input">Speaker of Negation:</label><br>
-    <input type="text" id="speaker-negation-input" name="speaker-negation-input"><br><br>
+    <input type="text" id="speaker-negation-input" name="speaker-negation-input">
+    <button type="button" id="submit-negation">Submit</button><br><br>
 
     <label for="questioners-affirmation-input">Questioners of Affirmation (comma-separated):</label><br>
-    <input type="text" id="questioners-affirmation-input" name="questioners-affirmation-input"><br><br>
+    <input type="text" id="questioners-affirmation-input" name="questioners-affirmation-input">
+    <button type="button" id="submit-questioners-affirmation">Submit</button><br><br>
 
     <label for="questioners-negation-input">Questioners of Negation (comma-separated):</label><br>
-    <input type="text" id="questioners-negation-input" name="questioners-negation-input"><br><br>
+    <input type="text" id="questioners-negation-input" name="questioners-negation-input">
+    <button type="button" id="submit-questioners-negation">Submit</button><br><br>
 
-    <input type="submit" value="Submit">
+    <input type="submit" value="Submit All">
   </form>
 
   <h2>Order of Speakers</h2>
@@ -86,33 +90,31 @@
     }
 
     // Sample usage to update the cycle table with randomized speakers and questioners
-    document.getElementById('code-form').addEventListener('submit', function(event) {
+    document.getElementById('submit-affirmation').addEventListener('click', function(event) {
       event.preventDefault();
-      var codesInput = document.getElementById('code-input').value;
-      var codesArray = codesInput.split(',').map(function(code) {
-        return code.trim();
-      });
-
       var speakerAffirmation = document.getElementById('speaker-affirmation-input').value.trim();
+      document.getElementById('speaker-affirmation-input').value = '';
+      document.getElementById('speaker-affirmation-input').focus();
+      document.getElementById('speaker-affirmation').innerText = speakerAffirmation;
+    });
+
+    document.getElementById('submit-negation').addEventListener('click', function(event) {
+      event.preventDefault();
       var speakerNegation = document.getElementById('speaker-negation-input').value.trim();
+      document.getElementById('speaker-negation-input').value = '';
+      document.getElementById('speaker-negation-input').focus();
+      document.getElementById('speaker-negation').innerText = speakerNegation;
+    });
+
+    document.getElementById('submit-questioners-affirmation').addEventListener('click', function(event) {
+      event.preventDefault();
       var questionersAffirmation = document.getElementById('questioners-affirmation-input').value.split(',').map(function(code) {
         return code.trim();
       });
-      var questionersNegation = document.getElementById('questioners-negation-input').value.split(',').map(function(code) {
-        return code.trim();
-      });
-
-      // Display order of speakers
-      var speakersHtml = '<h2>Order of Speakers</h2><ul>';
-      shuffleArray(codesArray).forEach(function(code, index) {
-        speakersHtml += '<li>' + code + '</li>';
-      });
-      speakersHtml += '</ul>';
-      document.getElementById('speakers-list').innerHTML = speakersHtml;
-
-      // Update the cycle table with input speakers and questioners
-      updateCycle(speakerAffirmation, questionersAffirmation, speakerNegation, questionersNegation);
+      document.getElementById('questioners-affirmation-input').value = '';
+      document.getElementById('questioners-affirmation-input').focus();
+      document.getElementById('questioners-affirmation').innerText = questionersAffirmation.join(', ');
     });
-  </script>
-</body>
-</html>
+
+    document.getElementById('submit-questioners-negation').addEventListener('click', function(event) {
+      event.preventDefault();
