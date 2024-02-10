@@ -30,6 +30,9 @@
   .cycle-container.active {
    display: block;
   }
+  .speakers-list.active {
+   display: block;
+  }
  </style>
 </head>
 <body>
@@ -80,6 +83,7 @@
 
       var speakersListDiv = document.createElement('div');
       speakersListDiv.classList.add('speakers-list'); // Add class to identify speakers list
+      speakersListDiv.classList.add('active'); // Initially set as active
       speakersListDiv.setAttribute('id', 'speakers-list' + cycleNumber);
 
       var cycleHeader = document.createElement('h2');
