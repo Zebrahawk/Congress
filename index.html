@@ -91,6 +91,7 @@
 <script>
   var currentCycle = 1;
   var totalCycles = 6; // Change this value if you want more or fewer cycles
+  var randomizedCodes; // Variable to store the randomized order of codes
 
   // Function to show/hide cycle containers based on current cycle
   function updateCycleVisibility() {
@@ -105,7 +106,13 @@
   }
 
   // Function to update the table with speakers and questioners for a specific cycle
-  function updateCycle(cycleNumber, speakerAffirmation, questionersAffirmation, speakerNegation, questionersNegation) {
+  function updateCycle(cycleNumber) {
+    var codeIndex = (currentCycle - 1) * 4; // Adjust index based on cycle number
+    var code = randomizedCodes[codeIndex];
+    var speakerAffirmation = code;
+    var questionersAffirmation = randomizedCodes.slice(codeIndex + 1, codeIndex + 3);
+    var speakerNegation = randomizedCodes[codeIndex + 3];
+    var questionersNegation = randomizedCodes.slice(codeIndex + 4, codeIndex + 6);
     document.getElementById('speaker-affirmation' + cycleNumber).innerText = speakerAffirmation;
     document.getElementById('questioners-affirmation' + cycleNumber).innerText = questionersAffirmation.join(', ');
     document.getElementById('speaker-negation' + cycleNumber).innerText = speakerNegation;
@@ -120,32 +127,23 @@
     });
 
     // Randomize the codes
-    for (var i = codesArray.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      [codesArray[i], codesArray[j]] = [codesArray[j], codesArray[i]];
+    randomizedCodes = [];
+    while (codesArray.length > 0) {
+      var randomIndex = Math.floor(Math.random() * codesArray.length);
+      randomizedCodes.push(codesArray[randomIndex]);
+      codesArray.splice(randomIndex, 1);
     }
-
-    // Display order of speakers
-    var speakersHtml = '<h2>Order of Speakers</h2><ul>';
-    codesArray.forEach(function(code, index) {
-      speakersHtml += '<li>' + code + ' ' +
-        '<button type="button" class="btn-affirmation" data-code="' + code + '">Affirmation Speaker</button>' +
-        '<button type="button" class="btn-negation" data-code="' + code + '">Negation Speaker</button>' +
-        '<button type="button" class="btn-affirmation-q" data-code="' + code + '">Affirmation Questioner</button>' +
-        '<button type="button" class="btn-negation-q" data-code="' + code + '">Negation Questioner</button>' +
-        '</li>';
-    });
-    speakersHtml += '</ul>';
-    document.getElementById('speakers-list').innerHTML = speakersHtml;
   }
 
-  // Randomize codes when the page loads
+  // Randomize codes and update speakers when the page loads
   randomizeCodes();
+  updateCycle(1);
 
   document.getElementById('prev-cycle').addEventListener('click', function() {
     if (currentCycle > 1) {
       currentCycle--;
       updateCycleVisibility();
+      updateCycle(currentCycle);
     }
   });
 
@@ -153,6 +151,7 @@
     if (currentCycle < totalCycles) {
       currentCycle++;
       updateCycleVisibility();
+      updateCycle(currentCycle);
     }
   });
 
@@ -160,20 +159,21 @@
   document.getElementById('speakers-list').addEventListener('click', function(event) {
     if (event.target.classList.contains('btn-affirmation')) {
       var code = event.target.getAttribute('data-code');
-      addSpeaker(currentCycle, 'affirmation', code);
+      addSpeaker('affirmation', code);
     } else if (event.target.classList.contains('btn-negation')) {
       var code = event.target.getAttribute('data-code');
-      addSpeaker(currentCycle, 'negation', code);
+      addSpeaker('negation', code);
     } else if (event.target.classList.contains('btn-affirmation-q')) {
       var code = event.target.getAttribute('data-code');
-      addQuestioner(currentCycle, 'affirmation', code);
+      addQuestioner('affirmation', code);
     } else if (event.target.classList.contains('btn-negation-q')) {
       var code = event.target.getAttribute('data-code');
-      addQuestioner(currentCycle, 'negation', code);
+      addQuestioner('negation', code);
     }
   });
 
-  function addSpeaker(cycleNumber, type, code) {
+  function addSpeaker(type, code) {
+    var cycleNumber = currentCycle;
     var cellIndex = type === 'affirmation' ? 0 : 2;
     var cell = document.getElementById('cycle' + cycleNumber).getElementsByTagName('table')[0].rows[1].cells[cellIndex];
     if (cell.innerHTML === '') {
@@ -183,7 +183,8 @@
     }
   }
 
-  function addQuestioner(cycleNumber, type, code) {
+  function addQuestioner(type, code) {
+    var cycleNumber = currentCycle;
     var cellIndex = type === 'affirmation' ? 1 : 3;
     var cell = document.getElementById('cycle' + cycleNumber).getElementsByTagName('table')[0].rows[1].cells[cellIndex];
     if (cell.innerHTML === '') {
@@ -193,7 +194,6 @@
     }
   }
 </script>
-
 
 </body>
 </html>
