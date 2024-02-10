@@ -80,6 +80,12 @@
 
       cycleContainer.appendChild(cycleHeader);
       
+      // Create speakers-list div
+      var speakersListDiv = document.createElement('div');
+      speakersListDiv.classList.add('speakers-list'); // Add class to identify speakers list
+      speakersListDiv.setAttribute('id', 'speakers-list' + cycleNumber);
+      cycleContainer.appendChild(speakersListDiv);
+
       // Create table
       var table = document.createElement('table');
       var tableRow = table.insertRow();
