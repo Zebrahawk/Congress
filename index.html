@@ -19,8 +19,14 @@
       font-size: 16px;
       cursor: pointer;
     }
+    #original-codes,
     #randomized-codes {
       margin-top: 20px;
+    }
+    #original-codes ul,
+    #randomized-codes ul {
+      list-style-type: none;
+      padding: 0;
     }
   </style>
 </head>
@@ -31,6 +37,7 @@
     <input type="text" id="code-input" placeholder="Enter codes...">
     <input type="submit" value="Randomize">
   </form>
+  <div id="original-codes"></div>
   <div id="randomized-codes"></div>
 
   <script>
@@ -40,6 +47,16 @@
       var codesArray = codesInput.split(',').map(function(code) {
         return code.trim();
       });
+
+      // Display original codes
+      var originalCodesHtml = '<h2>Original Codes:</h2><ul>';
+      codesArray.forEach(function(code) {
+        originalCodesHtml += '<li>' + code + '</li>';
+      });
+      originalCodesHtml += '</ul>';
+      document.getElementById('original-codes').innerHTML = originalCodesHtml;
+
+      // Randomize codes
       var randomizedCodes = shuffleArray(codesArray);
       var randomizedCodesHtml = '<h2>Randomized Codes:</h2><ul>';
       randomizedCodes.forEach(function(code) {
