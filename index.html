@@ -126,37 +126,6 @@
       newRow.innerHTML = '<td></td><td></td><td></td><td></td>'; // Add empty cells to the new row
     });
 
-    // Function to handle submission of speaker and questioner inputs
-    function submitInputs(cycleNumber) {
-      var speakerAffirmation = document.getElementById('speaker-affirmation' + cycleNumber).innerText.trim();
-      var speakerNegation = document.getElementById('speaker-negation' + cycleNumber).innerText.trim();
-      var questionersAffirmation = document.getElementById('questioners-affirmation' + cycleNumber).innerText.trim();
-      var questionersNegation = document.getElementById('questioners-negation' + cycleNumber).innerText.trim();
-      updateCycle(cycleNumber, speakerAffirmation, questionersAffirmation, speakerNegation, questionersNegation);
-    }
-
-    // Event listener for the buttons next to each code (using event delegation)
-    document.addEventListener('click', function(event) {
-      if (event.target.classList.contains('btn-affirmation') ||
-          event.target.classList.contains('btn-negation') ||
-          event.target.classList.contains('btn-affirmation-q') ||
-          event.target.classList.contains('btn-negation-q')) {
-        var code = event.target.getAttribute('data-code');
-        var table = document.getElementById('cycle' + currentCycle).getElementsByTagName('table')[0];
-        var lastRow = table.rows[table.rows.length - 1]; // Get the last row of the table
-
-        if (event.target.classList.contains('btn-affirmation')) {
-          lastRow.cells[0].innerText += (lastRow.cells[0].innerText === '') ? code : ', ' + code;
-        } else if (event.target.classList.contains('btn-negation')) {
-          lastRow.cells[2].innerText += (lastRow.cells[2].innerText === '') ? code : ', ' + code;
-        } else if (event.target.classList.contains('btn-affirmation-q')) {
-          lastRow.cells[1].innerText += (lastRow.cells[1].innerText === '') ? code : ', ' + code;
-        } else if (event.target.classList.contains('btn-negation-q')) {
-          lastRow.cells[3].innerText += (lastRow.cells[3].innerText === '') ? code : ', ' + code;
-        }
-      }
-    });
-
     // Function to handle switching to the next cycle
     document.getElementById('next-cycle').addEventListener('click', function() {
       if (currentCycle < totalCycles) {
@@ -189,12 +158,7 @@
       // Display order of speakers
       var speakersHtml = '<h2>Order of Speakers</h2><ul>';
       codesArray.forEach(function(code, index) {
-        speakersHtml += '<li>' + code + ' ' +
-          '<button type="button" class="btn-affirmation" data-code="' + code + '">Affirmation Speaker</button>' +
-          '<button type="button" class="btn-negation" data-code="' + code + '">Negation Speaker</button>' +
-          '<button type="button" class="btn-affirmation-q" data-code="' + code + '">Affirmation Questioner</button>' +
-          '<button type="button" class="btn-negation-q" data-code="' + code + '">Negation Questioner</button>' +
-          '</li>';
+        speakersHtml += '<li>' + code + '</li>'; // Display the randomized speaker order
       });
       speakersHtml += '</ul>';
 
@@ -202,6 +166,28 @@
       var speakersList = document.querySelector('.speakers-list.active');
       if (speakersList) {
         speakersList.innerHTML = speakersHtml;
+      }
+    });
+
+    // Event listener for the buttons next to each code (using event delegation)
+    document.addEventListener('click', function(event) {
+      if (event.target.classList.contains('btn-affirmation') ||
+          event.target.classList.contains('btn-negation') ||
+          event.target.classList.contains('btn-affirmation-q') ||
+          event.target.classList.contains('btn-negation-q')) {
+        var code = event.target.getAttribute('data-code');
+        var table = document.getElementById('cycle' + currentCycle).getElementsByTagName('table')[0];
+        var lastRow = table.rows[table.rows.length - 1]; // Get the last row of the table
+
+        if (event.target.classList.contains('btn-affirmation')) {
+          lastRow.cells[0].innerText += (lastRow.cells[0].innerText === '') ? code : ', ' + code;
+        } else if (event.target.classList.contains('btn-negation')) {
+          lastRow.cells[2].innerText += (lastRow.cells[2].innerText === '') ? code : ', ' + code;
+        } else if (event.target.classList.contains('btn-affirmation-q')) {
+          lastRow.cells[1].innerText += (lastRow.cells[1].innerText === '') ? code : ', ' + code;
+        } else if (event.target.classList.contains('btn-negation-q')) {
+          lastRow.cells[3].innerText += (lastRow.cells[3].innerText === '') ? code : ', ' + code;
+        }
       }
     });
   });
