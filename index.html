@@ -41,6 +41,24 @@
     <button type="button" id="randomize-codes">Randomize Codes</button>
   </form>
 
+  <form id="speakers-form">
+    <label for="speaker-affirmation-input">Speaker of Affirmation:</label><br>
+    <input type="text" id="speaker-affirmation-input" name="speaker-affirmation-input">
+    <button type="button" id="submit-affirmation">Submit</button><br><br>
+
+    <label for="speaker-negation-input">Speaker of Negation:</label><br>
+    <input type="text" id="speaker-negation-input" name="speaker-negation-input">
+    <button type="button" id="submit-negation">Submit</button><br><br>
+
+    <label for="questioners-affirmation-input">Questioners of Affirmation (comma-separated):</label><br>
+    <input type="text" id="questioners-affirmation-input" name="questioners-affirmation-input">
+    <button type="button" id="submit-questioners-affirmation">Submit</button><br><br>
+
+    <label for="questioners-negation-input">Questioners of Negation (comma-separated):</label><br>
+    <input type="text" id="questioners-negation-input" name="questioners-negation-input">
+    <button type="button" id="submit-questioners-negation">Submit</button><br><br>
+  </form>
+
   <div class="cycle-container active" id="cycle1">
     <h2>Order of Speakers</h2>
     <div id="speakers-list"></div>
@@ -140,6 +158,36 @@
         currentCycle++;
         updateCycleVisibility();
       }
+    });
+
+    // Function to handle submission of speaker and questioner inputs
+    function submitInputs(cycleNumber) {
+      var speakerAffirmation = document.getElementById('speaker-affirmation-input').value.trim();
+      var speakerNegation = document.getElementById('speaker-negation-input').value.trim();
+      var questionersAffirmation = document.getElementById('questioners-affirmation-input').value.split(',').map(function(code) {
+        return code.trim();
+      });
+      var questionersNegation = document.getElementById('questioners-negation-input').value.split(',').map(function(code) {
+        return code.trim();
+      });
+      updateCycle(cycleNumber, speakerAffirmation, questionersAffirmation, speakerNegation, questionersNegation);
+    }
+
+    // Submit button click event listeners
+    document.getElementById('submit-affirmation').addEventListener('click', function() {
+      submitInputs(currentCycle);
+    });
+
+    document.getElementById('submit-negation').addEventListener('click', function() {
+      submitInputs(currentCycle);
+    });
+
+    document.getElementById('submit-questioners-affirmation').addEventListener('click', function() {
+      submitInputs(currentCycle);
+    });
+
+    document.getElementById('submit-questioners-negation').addEventListener('click', function() {
+      submitInputs(currentCycle);
     });
   </script>
 </body>
