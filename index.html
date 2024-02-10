@@ -38,24 +38,7 @@
   <form id="code-form">
     <label for="code-input">Enter codes (comma-separated):</label><br>
     <input type="text" id="code-input" name="code-input"><br><br>
-
-    <label for="speaker-affirmation-input">Speaker of Affirmation:</label><br>
-    <input type="text" id="speaker-affirmation-input" name="speaker-affirmation-input">
-    <button type="button" id="submit-affirmation">Submit</button><br><br>
-
-    <label for="speaker-negation-input">Speaker of Negation:</label><br>
-    <input type="text" id="speaker-negation-input" name="speaker-negation-input">
-    <button type="button" id="submit-negation">Submit</button><br><br>
-
-    <label for="questioners-affirmation-input">Questioners of Affirmation (comma-separated):</label><br>
-    <input type="text" id="questioners-affirmation-input" name="questioners-affirmation-input">
-    <button type="button" id="submit-questioners-affirmation">Submit</button><br><br>
-
-    <label for="questioners-negation-input">Questioners of Negation (comma-separated):</label><br>
-    <input type="text" id="questioners-negation-input" name="questioners-negation-input">
-    <button type="button" id="submit-questioners-negation">Submit</button><br><br>
-
-    <input type="submit" value="Submit All">
+    <button type="button" id="randomize-codes">Randomize Codes</button>
   </form>
 
   <div class="cycle-container active" id="cycle1">
@@ -129,9 +112,8 @@
       document.getElementById('questioners-negation' + cycleNumber).innerText = questionersNegation.join(', ');
     }
 
-    // Sample usage to update the cycle table with randomized speakers and questioners
-    document.getElementById('code-form').addEventListener('submit', function(event) {
-      event.preventDefault();
+    // Function to randomize codes
+    document.getElementById('randomize-codes').addEventListener('click', function() {
       var codesInput = document.getElementById('code-input').value;
       var codesArray = codesInput.split(',').map(function(code) {
         return code.trim();
@@ -144,17 +126,6 @@
       });
       speakersHtml += '</ul>';
       document.getElementById('speakers-list').innerHTML = speakersHtml;
-
-      // Update the cycle table with input speakers and questioners for the current cycle
-      var speakerAffirmation = document.getElementById('speaker-affirmation-input').value.trim();
-      var speakerNegation = document.getElementById('speaker-negation-input').value.trim();
-      var questionersAffirmation = document.getElementById('questioners-affirmation-input').value.split(',').map(function(code) {
-        return code.trim();
-      });
-      var questionersNegation = document.getElementById('questioners-negation-input').value.split(',').map(function(code) {
-        return code.trim();
-      });
-      updateCycle(currentCycle, speakerAffirmation, questionersAffirmation, speakerNegation, questionersNegation);
     });
 
     document.getElementById('prev-cycle').addEventListener('click', function() {
