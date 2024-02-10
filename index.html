@@ -112,6 +112,15 @@
     // Initialize by showing the first cycle
     updateCycleVisibility();
 
+    // Create speakers list divs
+    var speakersListContainer = document.getElementById('speakers-list-container');
+    for (var i = 1; i <= totalCycles; i++) {
+      var speakersListDiv = document.createElement('div');
+      speakersListDiv.classList.add('speakers-list');
+      speakersListDiv.setAttribute('id', 'speakers-list' + i);
+      speakersListContainer.appendChild(speakersListDiv);
+    }
+
     // Function to update the table with speakers and questioners for a specific cycle
     function updateCycle(cycleNumber, speakerAffirmation, questionersAffirmation, speakerNegation, questionersNegation) {
       var cycleContainer = document.getElementById('cycle' + cycleNumber);
@@ -177,7 +186,7 @@
     });
 
     // Event listener for the buttons next to each code
-    document.getElementById('cycles-container').addEventListener('click', function(event) {
+    document.getElementById('speakers-list-container').addEventListener('click', function(event) {
       var code = event.target.getAttribute('data-code');
       var table = document.getElementById('cycle' + currentCycle).querySelector('table');
       var lastRow = table.rows[table.rows.length - 1]; // Get the last row of the table
