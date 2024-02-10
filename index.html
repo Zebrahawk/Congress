@@ -56,17 +56,22 @@
     var currentCycle = 1;
     var totalCycles = 6; // Change this value if you want more or fewer cycles
 
-    // Function to show/hide cycle containers based on current cycle
-    function updateCycleVisibility() {
-      for (var i = 1; i <= totalCycles; i++) {
-        var cycleContainer = document.getElementById('cycle' + i);
-        if (i === currentCycle) {
-          cycleContainer.classList.add('active');
-        } else {
-          cycleContainer.classList.remove('active');
-        }
-      }
+// Function to show/hide cycle containers based on current cycle
+function updateCycleVisibility() {
+  for (var i = 1; i <= totalCycles; i++) {
+    var cycleContainer = document.getElementById('cycle' + i);
+    var speakersListDiv = document.getElementById('speakers-list' + i);
+
+    if (i === currentCycle) {
+      cycleContainer.classList.add('active');
+      speakersListDiv.classList.add('active'); // Add the 'active' class to the speakers list div
+    } else {
+      cycleContainer.classList.remove('active');
+      speakersListDiv.classList.remove('active'); // Remove the 'active' class from other speakers list divs
     }
+  }
+}
+
 
     // Function to create a new cycle container with a table
     function createCycleContainer(cycleNumber) {
