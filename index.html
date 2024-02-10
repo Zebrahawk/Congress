@@ -151,40 +151,21 @@
 
   // Event listener for the buttons next to each code
   document.getElementById('speakers-list').addEventListener('click', function(event) {
+   var code = event.target.getAttribute('data-code');
+   var table = document.getElementById('cycle' + currentCycle).getElementsByTagName('table')[0];
+   var lastRow = table.rows[table.rows.length - 1]; // Get the last row of the table
+
    if (event.target.classList.contains('btn-affirmation')) {
-    var code = event.target.getAttribute('data-code');
-    addSpeaker(currentCycle, 'affirmation', code);
+    lastRow.cells[0].innerText += (lastRow.cells[0].innerText === '') ? code : ', ' + code;
    } else if (event.target.classList.contains('btn-negation')) {
-    var code = event.target.getAttribute('data-code');
-    addSpeaker(currentCycle, 'negation', code);
+    lastRow.cells[2].innerText += (lastRow.cells[2].innerText === '') ? code : ', ' + code;
    } else if (event.target.classList.contains('btn-affirmation-q')) {
-    var code = event.target.getAttribute('data-code');
-    addQuestioner(currentCycle, 'affirmation', code);
+    lastRow.cells[1].innerText += (lastRow.cells[1].innerText === '') ? code : ', ' + code;
    } else if (event.target.classList.contains('btn-negation-q')) {
-    var code = event.target.getAttribute('data-code');
-    addQuestioner(currentCycle, 'negation', code);
+    lastRow.cells[3].innerText += (lastRow.cells[3].innerText === '') ? code : ', ' + code;
    }
   });
 
-  function addSpeaker(cycleNumber, type, code) {
-   var cellIndex = type === 'affirmation' ? 0 : 2;
-   var cell = document.getElementById('cycle' + cycleNumber).getElementsByTagName('table')[0].rows[1].cells[cellIndex];
-   if (cell.innerHTML === '') {
-    cell.innerHTML = code;
-   } else {
-    cell.innerHTML += ', ' + code;
-   }
-  }
-
-  function addQuestioner(cycleNumber, type, code) {
-   var cellIndex = type === 'affirmation' ? 1 : 3;
-   var cell = document.getElementById('cycle' + cycleNumber).getElementsByTagName('table')[0].rows[1].cells[cellIndex];
-   if (cell.innerHTML === '') {
-    cell.innerHTML = code;
-   } else {
-    cell.innerHTML += ', ' + code;
-   }
-  }
  </script>
 </body>
 </html>
