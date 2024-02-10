@@ -29,6 +29,9 @@
 <body>
   <h1>Congress Debate</h1>
 
+  <h2>Order of Speakers</h2>
+  <div id="speakers-list"></div>
+
   <h2>Cycle 1</h2>
   <table>
     <tr>
@@ -46,6 +49,15 @@
   </table>
 
   <script>
+    // Function to shuffle array
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
     // Function to update the table with speakers and questioners
     function updateCycle(speakerAffirmation, questionersAffirmation, speakerNegation, questionersNegation) {
       document.getElementById('speaker-affirmation').innerText = speakerAffirmation;
@@ -54,14 +66,31 @@
       document.getElementById('questioners-negation').innerText = questionersNegation.join(', ');
     }
 
-    // Sample usage to update the cycle table
-    var cycle1 = {
-      speakerAffirmation: 'Code 1',
-      questionersAffirmation: ['Code 2', 'Code 3', 'Code 4', 'Code 5'],
-      speakerNegation: 'Code 6',
-      questionersNegation: ['Code 7', 'Code 8', 'Code 9', 'Code 10']
-    };
-    updateCycle(cycle1.speakerAffirmation, cycle1.questionersAffirmation, cycle1.speakerNegation, cycle1.questionersNegation);
+    // Sample usage to update the cycle table with randomized speakers and questioners
+    document.getElementById('code-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      var codesInput = document.getElementById('code-input').value;
+      var codesArray = codesInput.split(',').map(function(code) {
+        return code.trim();
+      });
+
+      // Display order of speakers
+      var speakersHtml = '<h2>Order of Speakers</h2><ul>';
+      shuffleArray(codesArray).forEach(function(code, index) {
+        speakersHtml += '<li>' + code + '</li>';
+      });
+      speakersHtml += '</ul>';
+      document.getElementById('speakers-list').innerHTML = speakersHtml;
+
+      // Randomly select speakers and questioners for the cycle
+      var speakerAffirmation = codesArray[0];
+      var questionersAffirmation = codesArray.slice(1, 5);
+      var speakerNegation = codesArray[5];
+      var questionersNegation = codesArray.slice(6, 10);
+
+      // Update the cycle table with randomized speakers and questioners
+      updateCycle(speakerAffirmation, questionersAffirmation, speakerNegation, questionersNegation);
+    });
   </script>
 </body>
 </html>
