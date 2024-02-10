@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Code Randomizer</title>
+  <title>Congress Debate</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -19,26 +19,33 @@
       font-size: 16px;
       cursor: pointer;
     }
-    #original-codes,
-    #randomized-codes {
+    #speakers-list,
+    #topic,
+    #speech-log,
+    #question-log {
       margin-top: 20px;
     }
-    #original-codes ul,
-    #randomized-codes ul {
+    #speakers-list ul,
+    #speech-log ul,
+    #question-log ul {
       list-style-type: none;
       padding: 0;
     }
   </style>
 </head>
 <body>
-  <h1>Code Randomizer</h1>
-  <p>Enter a list of codes separated by commas:</p>
-  <form id="code-form">
-    <input type="text" id="code-input" placeholder="Enter codes...">
-    <input type="submit" value="Randomize">
-  </form>
-  <div id="original-codes"></div>
-  <div id="randomized-codes"></div>
+  <h1>Congress Debate</h1>
+  <h2>Order of Speakers</h2>
+  <div id="speakers-list"></div>
+
+  <h2>Topic</h2>
+  <div id="topic"></div>
+
+  <h2>Speech Log</h2>
+  <div id="speech-log"></div>
+
+  <h2>Question Log</h2>
+  <div id="question-log"></div>
 
   <script>
     document.getElementById('code-form').addEventListener('submit', function(event) {
@@ -48,34 +55,30 @@
         return code.trim();
       });
 
-      // Display original codes
-      var originalCodesHtml = '<h2>Original Codes:</h2><ul>';
-      codesArray.forEach(function(code) {
-        originalCodesHtml += '<li>' + code + '</li>';
+      // Display order of speakers
+      var speakersHtml = '<ul>';
+      codesArray.forEach(function(code, index) {
+        speakersHtml += '<li>' + code + '</li>';
       });
-      originalCodesHtml += '</ul>';
-      document.getElementById('original-codes').innerHTML = originalCodesHtml;
+      speakersHtml += '</ul>';
+      document.getElementById('speakers-list').innerHTML = speakersHtml;
 
-      // Randomize codes
-      var randomizedCodes = shuffleArray(codesArray);
-      var randomizedCodesHtml = '<h2>Randomized Codes:</h2><ul>';
-      randomizedCodes.forEach(function(code) {
-        randomizedCodesHtml += '<li>' + code + '</li>';
-      });
-      randomizedCodesHtml += '</ul>';
-      document.getElementById('randomized-codes').innerHTML = randomizedCodesHtml;
+      // Randomly select a topic (you can replace this with your topic selection logic)
+      var topics = ['Topic 1', 'Topic 2', 'Topic 3'];
+      var randomTopic = topics[Math.floor(Math.random() * topics.length)];
+      document.getElementById('topic').innerHTML = '<p>Topic: ' + randomTopic + '</p>';
     });
 
-    function shuffleArray(array) {
-      var currentIndex = array.length, temporaryValue, randomIndex;
-      while (0 !== currentIndex) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-      }
-      return array;
+    // Function to log a speech
+    function logSpeech(speaker, topic, position) {
+      var speechLogHtml = '<li>' + speaker + ' spoke on ' + topic + ' as ' + position + '</li>';
+      document.getElementById('speech-log').innerHTML += speechLogHtml;
+    }
+
+    // Function to log a question
+    function logQuestion(questioner, speaker, topic) {
+      var questionLogHtml = '<li>' + questioner + ' asked ' + speaker + ' a question on ' + topic + '</li>';
+      document.getElementById('question-log').innerHTML += questionLogHtml;
     }
   </script>
 </body>
