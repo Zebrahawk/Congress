@@ -112,8 +112,11 @@
       document.getElementById('questioners-negation' + cycleNumber).innerText = questionersNegation.join(', ');
     }
 
+// Initialize randomized list of codes
+var randomizedCodes = [];
+
 // Function to randomize codes
-document.getElementById('randomize-codes').addEventListener('click', function() {
+function randomizeCodes() {
   var codesInput = document.getElementById('code-input').value;
   var codesArray = codesInput.split(',').map(function(code) {
     return code.trim();
@@ -124,6 +127,36 @@ document.getElementById('randomize-codes').addEventListener('click', function() 
     var j = Math.floor(Math.random() * (i + 1));
     [codesArray[i], codesArray[j]] = [codesArray[j], codesArray[i]];
   }
+
+  randomizedCodes = codesArray;
+}
+
+// Randomize the codes when the page loads
+randomizeCodes();
+
+// Function to display randomized order of speakers
+function displayRandomizedCodes() {
+  var speakersHtml = '<h2>Order of Speakers</h2><ul>';
+  randomizedCodes.forEach(function(code, index) {
+    speakersHtml += '<li>' + code + ' ' +
+      '<button type="button" class="btn-affirmation" data-code="' + code + '">Affirmation Speaker</button>' +
+      '<button type="button" class="btn-negation" data-code="' + code + '">Negation Speaker</button>' +
+      '<button type="button" class="btn-affirmation-q" data-code="' + code + '">Affirmation Questioner</button>' +
+      '<button type="button" class="btn-negation-q" data-code="' + code + '">Negation Questioner</button>' +
+      '</li>';
+  });
+  speakersHtml += '</ul>';
+  document.getElementById('speakers-list').innerHTML = speakersHtml;
+}
+
+// Display randomized order of speakers when the page loads
+displayRandomizedCodes();
+
+// Event listener for the "Randomize Codes" button
+document.getElementById('randomize-codes').addEventListener('click', function() {
+  randomizeCodes();
+  displayRandomizedCodes();
+});
 
   // Display order of speakers
   var speakersHtml = '<h2>Order of Speakers</h2><ul>';
