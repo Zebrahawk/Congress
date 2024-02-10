@@ -161,23 +161,24 @@
     }
 
     // Event listener for the buttons next to each code
-    document.getElementById('speakers-list').addEventListener('click', function(event) {
-      if (event.target.classList.contains('btn-affirmation')) {
-        var code = event.target.getAttribute('data-code');
-        document.getElementById('speaker-affirmation-input').value = code;
-      } else if (event.target.classList.contains('btn-negation')) {
-        var code = event.target.getAttribute('data-code');
-        document.getElementById('speaker-negation-input').value = code;
-      } else if (event.target.classList.contains('btn-affirmation-q')) {
-        var code = event.target.getAttribute('data-code');
-        var currentValue = document.getElementById('questioners-affirmation-input').value;
-        document.getElementById('questioners-affirmation-input').value = currentValue ? currentValue + ', ' + code : code;
-      } else if (event.target.classList.contains('btn-negation-q')) {
-        var code = event.target.getAttribute('data-code');
-        var currentValue = document.getElementById('questioners-negation-input').value;
-        document.getElementById('questioners-negation-input').value = currentValue ? currentValue + ', ' + code : code;
-      }
-    });
+document.getElementById('speakers-list').addEventListener('click', function(event) {
+  if (event.target.classList.contains('btn-affirmation')) {
+    var code = event.target.getAttribute('data-code');
+    document.getElementById('speaker-affirmation' + currentCycle).innerText = code;
+  } else if (event.target.classList.contains('btn-negation')) {
+    var code = event.target.getAttribute('data-code');
+    document.getElementById('speaker-negation' + currentCycle).innerText = code;
+  } else if (event.target.classList.contains('btn-affirmation-q')) {
+    var code = event.target.getAttribute('data-code');
+    var currentValue = document.getElementById('questioners-affirmation-input' + currentCycle).value;
+    document.getElementById('questioners-affirmation-input' + currentCycle).value = currentValue ? currentValue + ', ' + code : code;
+  } else if (event.target.classList.contains('btn-negation-q')) {
+    var code = event.target.getAttribute('data-code');
+    var currentValue = document.getElementById('questioners-negation-input' + currentCycle).value;
+    document.getElementById('questioners-negation-input' + currentCycle).value = currentValue ? currentValue + ', ' + code : code;
+  }
+});
+
   </script>
 </body>
 </html>
