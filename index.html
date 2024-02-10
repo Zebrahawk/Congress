@@ -112,9 +112,6 @@
       createCycleContainer(i);
     }
 
-    // Initialize by showing the first cycle
-    updateCycleVisibility();
-
     // Function to update the table with speakers and questioners for a specific cycle
     function updateCycle(cycleNumber, speakerAffirmation, questionersAffirmation, speakerNegation, questionersNegation) {
       document.getElementById('speaker-affirmation' + cycleNumber).innerText = speakerAffirmation;
@@ -170,7 +167,10 @@
           '</li>';
       });
       speakersHtml += '</ul>';
-      document.getElementById('speakers-list' + currentCycle).innerHTML = speakersHtml; // Modified line to target the current cycle
+      // Set the speakers list for all cycles
+      for (var i = 1; i <= totalCycles; i++) {
+        document.getElementById('speakers-list' + i).innerHTML = speakersHtml;
+      }
     });
 
     // Event listener for the buttons next to each code
