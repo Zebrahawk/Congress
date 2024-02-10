@@ -139,20 +139,6 @@ document.getElementById('randomize-codes').addEventListener('click', function() 
   document.getElementById('speakers-list').innerHTML = speakersHtml;
 });
 
-    document.getElementById('prev-cycle').addEventListener('click', function() {
-      if (currentCycle > 1) {
-        currentCycle--;
-        updateCycleVisibility();
-      }
-    });
-
-    document.getElementById('next-cycle').addEventListener('click', function() {
-      if (currentCycle < totalCycles) {
-        currentCycle++;
-        updateCycleVisibility();
-      }
-    });
-
 // Function to handle submission of speaker and questioner inputs
 function submitInputs(cycleNumber) {
   var speakerAffirmation = document.getElementById('speaker-affirmation' + cycleNumber).innerText.trim();
