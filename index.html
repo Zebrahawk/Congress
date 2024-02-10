@@ -112,26 +112,32 @@
       document.getElementById('questioners-negation' + cycleNumber).innerText = questionersNegation.join(', ');
     }
 
-    // Function to randomize codes
-    document.getElementById('randomize-codes').addEventListener('click', function() {
-      var codesInput = document.getElementById('code-input').value;
-      var codesArray = codesInput.split(',').map(function(code) {
-        return code.trim();
-      });
+// Function to randomize codes
+document.getElementById('randomize-codes').addEventListener('click', function() {
+  var codesInput = document.getElementById('code-input').value;
+  var codesArray = codesInput.split(',').map(function(code) {
+    return code.trim();
+  });
 
-      // Display order of speakers
-      var speakersHtml = '<h2>Order of Speakers</h2><ul>';
-      codesArray.forEach(function(code, index) {
-        speakersHtml += '<li>' + code + ' ' +
-          '<button type="button" class="btn-affirmation" data-code="' + code + '">Affirmation Speaker</button>' +
-          '<button type="button" class="btn-negation" data-code="' + code + '">Negation Speaker</button>' +
-          '<button type="button" class="btn-affirmation-q" data-code="' + code + '">Affirmation Questioner</button>' +
-          '<button type="button" class="btn-negation-q" data-code="' + code + '">Negation Questioner</button>' +
-          '</li>';
-      });
-      speakersHtml += '</ul>';
-      document.getElementById('speakers-list').innerHTML = speakersHtml;
-    });
+  // Randomize the codes
+  for (var i = codesArray.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    [codesArray[i], codesArray[j]] = [codesArray[j], codesArray[i]];
+  }
+
+  // Display order of speakers
+  var speakersHtml = '<h2>Order of Speakers</h2><ul>';
+  codesArray.forEach(function(code, index) {
+    speakersHtml += '<li>' + code + ' ' +
+      '<button type="button" class="btn-affirmation" data-code="' + code + '">Affirmation Speaker</button>' +
+      '<button type="button" class="btn-negation" data-code="' + code + '">Negation Speaker</button>' +
+      '<button type="button" class="btn-affirmation-q" data-code="' + code + '">Affirmation Questioner</button>' +
+      '<button type="button" class="btn-negation-q" data-code="' + code + '">Negation Questioner</button>' +
+      '</li>';
+  });
+  speakersHtml += '</ul>';
+  document.getElementById('speakers-list').innerHTML = speakersHtml;
+});
 
     document.getElementById('prev-cycle').addEventListener('click', function() {
       if (currentCycle > 1) {
