@@ -71,6 +71,7 @@
     var currentCycle = 1;
     var totalCycles = 6; // Change this value if you want more or fewer cycles
     var speakerOrder = {}; // Object to store randomized speaker order
+    var leastSpeechesOrder = []; // Array to store the order of codes based on least speeches given
 
     // Function to show/hide cycle containers based on current cycle
     function updateCycleVisibility() {
@@ -183,6 +184,11 @@
       // Store randomized order of speakers
       speakerOrder[currentCycle] = codesArray;
 
+      // Initialize least speeches order if it's empty
+      if (leastSpeechesOrder.length === 0) {
+        leastSpeechesOrder = codesArray.slice();
+      }
+
       // Display order of speakers
       var speakersHtml = '<h2>Order of Speakers</h2><ul>';
       codesArray.forEach(function(code, index) {
@@ -198,7 +204,7 @@
       
       // Display list of codes sorted by least speeches given
       var leastSpeechesListHtml = '<h2>List of Codes Sorted by Least Speeches Given</h2><ul>';
-      speakerOrder[currentCycle].forEach(function(code, index) {
+      leastSpeechesOrder.forEach(function(code, index) {
         leastSpeechesListHtml += '<li>' + code + '</li>';
       });
       leastSpeechesListHtml += '</ul>';
@@ -226,20 +232,27 @@
 
     // Function to update the list of codes sorted by least speeches given
     function updateLeastSpeechesList() {
-      var leastSpeechesListHtml = '<h2>List of Codes Sorted by Least Speeches Given</h2><ul>';
-      var codesArray = speakerOrder[currentCycle].slice(); // Make a copy of the array
       var table = document.getElementById('cycle' + currentCycle).querySelector('table');
+      var speakerCodes = [];
       for (var i = 0; i < table.rows.length; i++) {
         var cells = table.rows[i].cells;
-        var speakerCodes = cells[0].innerText.split(', ');
-        speakerCodes.forEach(function(code) {
-          var index = codesArray.indexOf(code);
-          if (index !== -1) {
-            codesArray.splice(index, 1); // Remove the code from the array if found
-          }
-        });
+        var codes = cells[0].innerText.split(', ');
+        speakerCodes = speakerCodes.concat(codes);
       }
-      codesArray.forEach(function(code) {
+
+      // Remove duplicate codes
+      speakerCodes = Array.from(new Set(speakerCodes));
+
+      // Update least speeches order based on the current speeches
+      leastSpeechesOrder = speakerOrder[currentCycle].slice().sort(function(a, b) {
+        var speechesA = speakerCodes.filter(code => code === a).length;
+        var speechesB = speakerCodes.filter(code => code === b).length;
+        return speechesA - speechesB;
+      });
+
+      // Display updated list of codes sorted by least speeches given
+      var leastSpeechesListHtml = '<h2>List of Codes Sorted by Least Speeches Given</h2><ul>';
+      leastSpeechesOrder.forEach(function(code, index) {
         leastSpeechesListHtml += '<li>' + code + '</li>';
       });
       leastSpeechesListHtml += '</ul>';
