@@ -49,6 +49,18 @@
  <!-- Container for speakers list -->
  <div id="speakers-list-container"></div>
 
+ <!-- Lists of codes -->
+ <div id="codes-lists">
+  <div id="speeches-list">
+    <h2>List of Codes Sorted by Least Speeches Given</h2>
+    <ul id="least-speeches-list"></ul>
+  </div>
+  <div id="questions-list">
+    <h2>List of Codes Sorted by Least Questions Asked</h2>
+    <ul id="least-questions-list"></ul>
+  </div>
+ </div>
+
  <button id="add-row">Add Row</button>
  <button id="prev-cycle">Previous Cycle</button>
  <button id="next-cycle">Next Cycle</button>
@@ -183,6 +195,17 @@
       });
       speakersHtml += '</ul>';
       document.getElementById('speakers-list' + currentCycle).innerHTML = speakersHtml; // Modified line to target the current cycle
+      
+      // Display list of codes sorted by least speeches given
+      var leastSpeechesListHtml = '<h2>List of Codes Sorted by Least Speeches Given</h2><ul>';
+      speakerOrder[currentCycle].forEach(function(code, index) {
+        leastSpeechesListHtml += '<li>' + code + '</li>';
+      });
+      leastSpeechesListHtml += '</ul>';
+      document.getElementById('least-speeches-list').innerHTML = leastSpeechesListHtml;
+      
+      // Display list of codes sorted by least questions asked
+      // This part needs to be implemented
     });
 
     // Event listener for the buttons next to each code
