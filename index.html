@@ -203,9 +203,6 @@
       });
       leastSpeechesListHtml += '</ul>';
       document.getElementById('least-speeches-list').innerHTML = leastSpeechesListHtml;
-      
-      // Display list of codes sorted by least questions asked
-      // This part needs to be implemented
     });
 
     // Event listener for the buttons next to each code
@@ -216,14 +213,38 @@
 
       if (event.target.classList.contains('btn-affirmation')) {
         lastRow.cells[0].innerText += (lastRow.cells[0].innerText === '') ? code : ', ' + code;
+        updateLeastSpeechesList();
       } else if (event.target.classList.contains('btn-negation')) {
         lastRow.cells[2].innerText += (lastRow.cells[2].innerText === '') ? code : ', ' + code;
+        updateLeastSpeechesList();
       } else if (event.target.classList.contains('btn-affirmation-q')) {
         lastRow.cells[1].innerText += (lastRow.cells[1].innerText === '') ? code : ', ' + code;
       } else if (event.target.classList.contains('btn-negation-q')) {
         lastRow.cells[3].innerText += (lastRow.cells[3].innerText === '') ? code : ', ' + code;
       }
     });
+
+    // Function to update the list of codes sorted by least speeches given
+    function updateLeastSpeechesList() {
+      var leastSpeechesListHtml = '<h2>List of Codes Sorted by Least Speeches Given</h2><ul>';
+      var codesArray = speakerOrder[currentCycle].slice(); // Make a copy of the array
+      var table = document.getElementById('cycle' + currentCycle).querySelector('table');
+      for (var i = 0; i < table.rows.length; i++) {
+        var cells = table.rows[i].cells;
+        var speakerCodes = cells[0].innerText.split(', ');
+        speakerCodes.forEach(function(code) {
+          var index = codesArray.indexOf(code);
+          if (index !== -1) {
+            codesArray.splice(index, 1); // Remove the code from the array if found
+          }
+        });
+      }
+      codesArray.forEach(function(code) {
+        leastSpeechesListHtml += '<li>' + code + '</li>';
+      });
+      leastSpeechesListHtml += '</ul>';
+      document.getElementById('least-speeches-list').innerHTML = leastSpeechesListHtml;
+    }
   });
  </script>
 </body>
