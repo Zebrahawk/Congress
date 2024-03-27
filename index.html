@@ -179,32 +179,33 @@ function updateSpeakerOrder(codesArray) { // Add codesArray as a parameter
   });
 
   // Function to randomize codes
-  document.getElementById('randomize-codes').addEventListener('click', function() {
+document.getElementById('randomize-codes').addEventListener('click', function() {
    var codesInput = document.getElementById('code-input').value;
    var codesArray = codesInput.split(',').map(function(code) {
-    return code.trim();
+      return code.trim();
    });
 
    // Randomize the codes
    for (var i = codesArray.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    [codesArray[i], codesArray[j]] = [codesArray[j], codesArray[i]];
+      var j = Math.floor(Math.random() * (i + 1));
+      [codesArray[i], codesArray[j]] = [codesArray[j], codesArray[i]];
    }
 
    // Store randomized order
-speakerOrder[currentCycle] = {
+   speakerOrder[currentCycle] = {
       codes: codesArray,
       speechCount: {} 
-  };
+   };
 
-  // Initialize speech count
-  codesArray.forEach(code => {
+   // Initialize speech count
+   codesArray.forEach(code => {
       speakerOrder[currentCycle].speechCount[code] = 0;
-  }); 
+   }); 
 
-  updateSpeakerOrder(); // Call the function to update the display initially 
+   // Call the function to update the display initially 
+   updateSpeakerOrder(codesArray); // Pass codesArray as an argument
 
-}); // End of randomize button event listener
+});
 
 // Event listener for the buttons next to each code
 document.getElementById('speakers-list-container').addEventListener('click', function(event) {
