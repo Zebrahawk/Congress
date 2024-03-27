@@ -116,18 +116,18 @@
    speakersListContainer.appendChild(speakersListDiv);
   }
  // Function to update the list of speakers in the correct order
-  function updateSpeakerOrder() {
-    const codes = speakerOrder[currentCycle].codes;
-    const speechCount = speakerOrder[currentCycle].speechCount;
+function updateSpeakerOrder(codesArray) { // Add codesArray as a parameter 
+  const codes = speakerOrder[currentCycle].codes;
+  const speechCount = speakerOrder[currentCycle].speechCount;
 
-    // Sort based on speechCount, then by original position
-    codes.sort((a, b) => {
+  // Sort based on speechCount, then by original position
+  codesArray.sort((a, b) => { // Use the passed codesArray
     if (speechCount[a] !== speechCount[b]) {
       return speechCount[a] - speechCount[b]; 
     } else {
-      return codesArray.indexOf(a) - codesArray.indexOf(b);
+      return codesArray.indexOf(a) - codesArray.indexOf(b); // Use codesArray here too!
     }
-    });
+  });
 
     // Update the speaker list display
     const speakersList = document.getElementById('speakers-list' + currentCycle); 
